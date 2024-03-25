@@ -1,0 +1,13 @@
+#taskBackground {
+  width: 1048px;
+  height: 760px;
+  background-color: #5c5c5c;
+}
+#menu{
+    background-color: #d9d9d9;
+    height: 150px;
+    width: 133px;
+}
+#inputTask{
+    background: #acacac;
+}
