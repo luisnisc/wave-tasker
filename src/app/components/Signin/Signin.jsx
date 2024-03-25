@@ -23,7 +23,7 @@ export default function Signin() {
       </div>
       <div
         id="signin"
-        className="text-black border border-solid rounded-xl flex justify-center"
+        className="text-black border border-solid rounded-xl flex justify-center "
       >
         <form
           action=""
@@ -39,7 +39,7 @@ export default function Signin() {
               <input
                 type="text"
                 id="username"
-                className="border border-solid rounded-xl h-10 w-64 focus:border-black focus:outline-none focus:border-2"
+                className="border border-solid rounded-xl h-10 w-64 p-2 focus:border-black focus:outline-none focus:border-2"
               />
             </label>
           </div>
@@ -53,7 +53,7 @@ export default function Signin() {
               <input
                 type="text"
                 id="username"
-                className="border border-solid rounded-xl h-10 w-64 focus:border-black focus:outline-none focus:border-2"
+                className="border border-solid rounded-xl h-10 w-64 p-2 focus:border-black focus:outline-none focus:border-2"
               />
             </label>
           </div>
@@ -69,7 +69,7 @@ export default function Signin() {
                 <input
                   type={passwordInput}
                   id="password"
-                  className="border border-solid rounded-xl h-10 w-64 pr-10 focus:border-black focus:outline-none focus:border-2"
+                  className="border border-solid rounded-xl h-10 w-64 pr-10 pl-2 focus:border-black focus:outline-none focus:border-2"
                 />
 
                 <VisibilityIcon
@@ -92,7 +92,7 @@ export default function Signin() {
                 <input
                   type={passwordInput}
                   id="password"
-                  className="border border-solid rounded-xl h-10 w-64 pr-10 focus:border-black focus:outline-none focus:border-2"
+                  className="border border-solid rounded-xl h-10 w-64 pr-10 pl-2 focus:border-black focus:outline-none focus:border-2"
                 />
 
                 <VisibilityIcon

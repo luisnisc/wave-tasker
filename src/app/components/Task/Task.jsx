@@ -77,7 +77,7 @@ export default function Task() {
             <input
               type="text"
               id="inputTask"
-              className="absolute w-full bottom-0 rounded-b-3xl h-10"
+              className="absolute w-full bottom-0 rounded-b-3xl p-4 h-10 focus:border-black focus:outline-none focus:border-2"
             />
             <button type="submit">
               <AddCircleOutlineIcon className="absolute right-2 bottom-2" />
