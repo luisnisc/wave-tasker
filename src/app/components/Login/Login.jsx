@@ -37,7 +37,7 @@ export default function Login() {
               <input
                 type="text"
                 id="username"
-                className="border border-solid rounded-xl h-10 w-64 p-2 focus:border-black focus:outline-none focus:border-2"
+                className="border border-solid rounded-xl h-10 w-64 p-2 border-gray-300 focus:border-black focus:outline-none focus:border-2"
               />
             </label>
           </div>
@@ -53,7 +53,7 @@ export default function Login() {
                 <input
                   type={passwordInput}
                   id="password"
-                  className="border border-solid rounded-xl h-10 w-64 pr-10 pl-2 focus:border-black focus:outline-none focus:border-2"
+                  className="border border-solid rounded-xl h-10 w-64 pr-10 pl-2 border-gray-300 focus:border-black focus:outline-none focus:border-2"
                 />
                 
                 <VisibilityIcon onClick={handlePasswordVisibility} sx={{color:"gray"}} className="absolute right-2 top-1/2 transform -translate-y-1/2" />
