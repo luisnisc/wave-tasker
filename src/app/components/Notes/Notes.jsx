@@ -13,10 +13,10 @@ import { Menu } from "@mui/base/Menu";
 import { MenuItem } from "@mui/base/MenuItem";
 
 import "../../../../styles/Notes.css";
-export default function Notes() {
-  const [data, setData] = useState([]);
+
+export default function Notes(initialData) {
+  const [data, setData] = useState([initialData]);
   const [menuIconOpen, setMenuIconOpen] = useState(false);
-  const [isPageLoaded, setIsPageLoaded] = useState(false);
   const [userId, setUserId] = useState("");
   const handleDelete = async (id) => {
     event.preventDefault();
@@ -80,10 +80,10 @@ export default function Notes() {
       .then((response) => response.json())
       .then((data) => {
         setData(data);
-        setIsPageLoaded(true);
       });
   }, [userId]);
-  
+
+
   return (
     <div
       id="padre"
@@ -169,7 +169,7 @@ export default function Notes() {
             <div className="text-4xl mt-8 mx-3">
               <h1>{note.title}</h1>
             </div>
-            <div className="mt-5 ml-4 overflow-scroll">
+            <div className="mt-5 ml-4 overflow-y-auto break-words whitespace-pre-wrap max-h-[200px] hide-scrollbar pr-3">
               <p>{note.body}</p>
             </div>
           </div>
@@ -177,14 +177,4 @@ export default function Notes() {
       </div>
     </div>
   );
-}
-export async function getServerSideProps() {
-  const response = await fetch("/api/notes/");
-  const data = await response.json();
-
-  return {
-    props: {
-      data,
-    },
-  };
 }

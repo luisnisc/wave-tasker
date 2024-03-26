@@ -22,6 +22,7 @@ export default async function handler(req, res) {
             await db.collection("tasks").insertOne(newTask);
             res.status(201).json(newTask);
             break;
+            
         default:
             res.setHeader("Allow", ["GET", "POST", "PUT", "DELETE"]);
             res.status(405).end(`Method ${method} Not Allowed`);

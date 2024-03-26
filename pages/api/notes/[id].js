@@ -10,9 +10,10 @@ export default async function handler(req, res) {
   switch (method) {
     case "PUT":
       const update = req.body;
+      delete update._id; // Elimina el campo _id del objeto update
       try {
         const updateNote = await collection.findOneAndUpdate(
-          { id: id },
+          { id: id, userId: update.userId }, // busca por 'id' y 'userId'
           { $set: update },
           { returnOriginal: false }
         );
@@ -21,10 +22,10 @@ export default async function handler(req, res) {
           !updateNote.lastErrorObject ||
           !updateNote.lastErrorObject.updatedExisting
         )
-        res.json({
-          message: `Note: ${id} updated`,
-          product: updateNote.value,
-        });
+          res.json({
+            message: `Note: ${id} updated`,
+            product: updateNote.value,
+          });
       } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Error to update the note" });
@@ -32,13 +33,16 @@ export default async function handler(req, res) {
       break;
     case "DELETE":
       try {
-        const deleteNotes = await collection.findOneAndDelete({ id: id });
+        const deleteNotes = await collection.findOneAndDelete({
+          id: id,
+          userId: req.body.userId,
+        });
         if (
           !deleteNotes ||
           !deleteNotes.lastErrorObject ||
           deleteNotes.lastErrorObject.n === 0
-        ) 
-        res.json({ message: `Note: ${id} deleted` });
+        )
+          res.json({ message: `Note: ${id} deleted` });
       } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Error to delete the note" });

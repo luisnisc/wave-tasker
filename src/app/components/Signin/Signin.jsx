@@ -43,7 +43,7 @@ export default function Signin() {
         );
         const newProduct = await response.json();
         console.log(newProduct);
-
+        
         Swal.fire({
           title: "User added successfully!",
           text: "",
@@ -56,7 +56,10 @@ export default function Signin() {
             title: "sweet-alert-title",
             content: "sweet-alert-content",
           },
-        })
+        }).then(() => {
+          window.location.href = '/';
+        });
+        
       }
     } catch (error) {
       console.error("Error:", error);

@@ -38,9 +38,17 @@ export default function Login() {
     } catch (error) {
       // An error occurred. Show an error message.
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Something went wrong!',
+        icon: "error",
+        title: "Oops...",
+        html: '<p style="color: #ffffff;">User not found</p>',
+        confirmButtonText: "OK",
+        confirmButtonColor: "#de6d6d",
+        background: "#272727",
+        customClass: {
+          confirmButton: "sweet-alert-button",
+          title: "sweet-alert-title",
+          content: "sweet-alert-content",
+        },
       });
     }
   };

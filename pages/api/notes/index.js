@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     switch (method) {
         case "GET":
             // Obtener todas las tareas para el usuario específico
-              const notes = await db.collection("notes").find({ userId: req.query.userId }).toArray();
+              const notes = await db.collection("notes").find({ userId: req.query.userId}).toArray();
             res.json(notes);
             break;
         case "POST":
@@ -23,6 +23,7 @@ export default async function handler(req, res) {
             await db.collection("notes").insertOne(newNote);
             res.status(201).json(newNote);
             break;
+            
         default:
             res.setHeader("Allow", ["GET", "POST", "PUT", "DELETE"]);
             res.status(405).end(`Method ${method} Not Allowed`);

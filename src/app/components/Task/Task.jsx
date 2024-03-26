@@ -38,7 +38,7 @@ export default function Task() {
           icon: "error",
           title: "Oops...",
           html: '<p style="color: #ffffff;">Something was wrong!</p>',
-          footer: '<p style="color: #ffffff;">Note not found</p>',
+          footer: '<p style="color: #ffffff;">Task not found</p>',
           confirmButtonText: "OK",
           confirmButtonColor: "#de6d6d",
           background: "#272727",
@@ -116,12 +116,39 @@ export default function Task() {
       console.error("Error:", error);
     }
   };
-  const handleCheck = (id) => {
-    setData(
-      data.map((task) =>
-        task.id === id ? { ...task, checked: !task.checked } : task
-      )
-    );
+  const handleCheck = async (id) => {
+    console.log(id)
+    const taskToCheck = data.find((task) => Number(task.id) === id);
+    if (!taskToCheck) {
+      console.error(`Task with id ${id} not found`);
+      return;
+    }
+
+    const updatedTask = { ...taskToCheck, checked: !taskToCheck.checked };
+
+    try {
+      const response = await fetch(`/api/tasks/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedTask),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const updatedTaskFromServer = await response.json();
+
+      setData(
+        data.map((task) =>
+          Number(task.id) === id ? updatedTaskFromServer : task
+        )
+      );
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
   useEffect(() => {
     // Verifica si estás en el navegador antes de acceder a localStorage
@@ -145,11 +172,10 @@ export default function Task() {
   useEffect(() => {
     setIsPageLoaded(true);
   }, []);
-
   return (
     <div
       id="padre"
-      className="flex justify-center items-center h-screen"
+      className="flex flex-col justify-center items-center h-screen"
     >
       <Avatar
         id="avatar"
@@ -195,11 +221,11 @@ export default function Task() {
       </div>
       <div
         id="taskBackground"
-        className="rounded-3xl flex flex-col h-screen"
+        className="rounded-3xl flex flex-col justify-between h-full"
       >
         <div
           id=" taskArea"
-          className="w-full overflow-auto mt-4 "
+          className="w-full overflow-auto mt-4 flex flex-col items-center  hide-scrollbar"
         >
           {data.map((task) => (
             <div
@@ -223,7 +249,7 @@ export default function Task() {
                     )}
                   </button>
                 )}
-                <span className={task.checked ? "ml-8 line-through" : "ml-8"}>
+                <span className={task.checked? "ml-8 line-through" : "ml-8"}>
                   {task.task}
                 </span>
                 {task.task && (
@@ -240,12 +266,12 @@ export default function Task() {
             </div>
           ))}
         </div>
-        <div className="relative ">
+        <div className="relative">
           <form onSubmit={handleSubmit}>
             <input
               type="text"
               id="inputTask"
-              className="absolute bottom-0 w-full rounded-b-3xl p-4 h-10 opacity-80 focus:border-black focus:outline-none focus:border-2 focus:opacity-100"
+              className="w-full rounded-b-3xl p-4 h-10 opacity-80 focus:border-black focus:outline-none focus:border-2 focus:opacity-100"
               placeholder="Add a task"
               value={task}
               onChange={(e) => setTask(e.target.value)}

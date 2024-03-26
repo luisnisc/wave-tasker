@@ -6,11 +6,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import Swal from "sweetalert2";
 import "../../../../styles/AddNoteForm.css";
 export default function AddNoteForm() {
-    const [data, setData] = useState([]);
-    const [title, setTitle] = useState("");
-    const [userId, setUserId] = useState("");
+  const [data, setData] = useState([]);
+  const [title, setTitle] = useState("");
+  const [userId, setUserId] = useState("");
   const [body, setBody] = useState("");
-  
 
   /**
    * Maneja el envío del formulario.
@@ -46,16 +45,19 @@ export default function AddNoteForm() {
             title: "sweet-alert-title",
             content: "sweet-alert-content",
           },
-        })
+        }).then(() => {
+          window.location.href = "/notes";
+        });
       }
     } catch (error) {
       console.error("Error:", error);
     }
+    
   };
   useEffect(() => {
     // Verifica si estás en el navegador antes de acceder a localStorage
-    if (typeof window !== 'undefined') {
-      setUserId(localStorage.getItem('userId'));
+    if (typeof window !== "undefined") {
+      setUserId(localStorage.getItem("userId"));
     }
   }, []);
   useEffect(() => {
@@ -129,7 +131,10 @@ export default function AddNoteForm() {
               </div>
             </label>
             <div className="flex justify-center items-center h-52">
-              <button type="submit"className="bg-gray-500 w-44 h-14 text-white text-3xl rounded-3xl" >
+              <button
+                type="submit"
+                className="bg-gray-500 w-44 h-14 text-white text-3xl rounded-3xl"
+              >
                 Add Note
               </button>
             </div>
