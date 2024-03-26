@@ -2,16 +2,66 @@
 import React from "react";
 import { useState } from "react";
 import "../../../../styles/Signin.css";
+import Swal from "sweetalert2";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 export default function Signin() {
   const [passwordInput, setPasswordInput] = useState("password");
-
+  const [confirmPasswordInput, setConfirmPasswordInput] = useState("password");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const handlePasswordVisibility = () => {
-    if (passwordInput === "password") {
+    if (passwordInput === "password" || confirmPasswordInput === "password") {
       setPasswordInput("text");
     } else {
       setPasswordInput("password");
     }
+  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }else{
+    try {
+      const response = await fetch("/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, username, password }),
+      });
+    
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } else {
+        console.log(
+          "User: " +
+            username +
+            " added"
+        );
+        const newProduct = await response.json();
+        console.log(newProduct);
+
+        Swal.fire({
+          title: "User added successfully!",
+          text: "",
+          icon: "success",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#a5dc86",
+          background: "#272727",
+          customClass: {
+            confirmButton: "sweet-alert-button",
+            title: "sweet-alert-title",
+            content: "sweet-alert-content",
+          },
+        })
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
   };
   return (
     <div className="flex justify-center items-center h-screen">
@@ -26,20 +76,22 @@ export default function Signin() {
         className="text-black border border-solid rounded-xl flex justify-center "
       >
         <form
-          action=""
+          onSubmit={handleSubmit}
           className=""
         >
           <div className="mt-8">
             <label
-              htmlFor="username"
+              htmlFor="email"
               className="text-lg w-10 "
             >
               Email
               <br />
               <input
                 type="text"
-                id="username"
+                id="email"
                 className="border border-solid rounded-xl h-10 w-64 p-2 border-gray-300 focus:border-black focus:outline-none focus:border-2"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </label>
           </div>
@@ -54,6 +106,8 @@ export default function Signin() {
                 type="text"
                 id="username"
                 className="border border-solid rounded-xl h-10 w-64 p-2 border-gray-300 focus:border-black focus:outline-none focus:border-2"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </label>
           </div>
@@ -70,6 +124,8 @@ export default function Signin() {
                   type={passwordInput}
                   id="password"
                   className="border border-solid rounded-xl h-10 w-64 pr-10 pl-2 border-gray-300 focus:border-black focus:outline-none focus:border-2"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
 
                 <VisibilityIcon
@@ -83,16 +139,18 @@ export default function Signin() {
           <br />
           <div>
             <label
-              htmlFor="password"
+              htmlFor="passwordConfirm"
               className="text-lg w-10"
             >
               Confirm Password
               <br />
               <div className="relative">
                 <input
-                  type={passwordInput}
-                  id="password"
+                  type={confirmPasswordInput}
+                  id="passwordConfirm"
                   className="border border-solid rounded-xl h-10 w-64 pr-10 pl-2 border-gray-300 focus:border-black focus:outline-none focus:border-2"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
 
                 <VisibilityIcon

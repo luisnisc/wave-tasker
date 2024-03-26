@@ -3,7 +3,7 @@ import { connectToDatabase } from "../../../utils/mongodb";
 export default async function handler(req, res) {
     const { method } = req;
     const { db } = await connectToDatabase();
-    const collection = db.collection("tasks");
+    const collection = db.collection("users");
     const { id: idString } = req.query;
     const id = Number(idString);
 
@@ -11,37 +11,37 @@ export default async function handler(req, res) {
         case "PUT":
             const update = req.body;
             try {
-                const updateTask = await collection.findOneAndUpdate(
+                const updateUser = await collection.findOneAndUpdate(
                     { id: id },
                     { $set: update },
                     { returnOriginal: false }
                 );
                 if (
-                    !updateTask ||
-                    !updateTask.lastErrorObject ||
-                    !updateTask.lastErrorObject.updatedExisting
+                    !updateUser ||
+                    !updateUser.lastErrorObject ||
+                    !updateUser.lastErrorObject.updatedExisting
                 )
                 res.json({
-                    message: `Task: ${id} updated`,
-                    task: updateTask.value,
+                    message: `User: ${id} updated`,
+                    user: updateUser.value,
                 });
             } catch (error) {
                 console.error(error);
-                res.status(500).json({ message: "Error to update the task" });
+                res.status(500).json({ message: "Error to update the user" });
             }
             break;
         case "DELETE":
             try {
-                const deleteTask = await collection.findOneAndDelete({ id: id });
+                const deleteUser = await collection.findOneAndDelete({ id: id });
                 if (
-                    !deleteTask ||
-                    !deleteTask.lastErrorObject ||
-                    deleteTask.lastErrorObject.n === 0
+                    !deleteUser ||
+                    !deleteUser.lastErrorObject ||
+                    deleteUser.lastErrorObject.n === 0
                 ) 
-                res.json({ message: `Task: ${id} deleted` });
+                res.json({ message: `User: ${id} deleted` });
             } catch (error) {
                 console.error(error);
-                res.status(500).json({ message: "Error to delete the task" });
+                res.status(500).json({ message: "Error to delete the user" });
             }
             break;
         default:

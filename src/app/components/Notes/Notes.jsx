@@ -6,7 +6,7 @@ import Avatar from "@mui/material/Avatar";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 import { Dropdown } from "@mui/base/Dropdown";
 import { MenuButton } from "@mui/base/MenuButton";
 import { Menu } from "@mui/base/Menu";
@@ -17,6 +17,7 @@ export default function Notes() {
   const [data, setData] = useState([]);
   const [menuIconOpen, setMenuIconOpen] = useState(false);
   const [isPageLoaded, setIsPageLoaded] = useState(false);
+  const [userId, setUserId] = useState("");
   const handleDelete = async (id) => {
     event.preventDefault();
 
@@ -60,33 +61,33 @@ export default function Notes() {
           },
         }).then(() => {
           const deleteNoteId = Number(id);
-          const newData = data.filter(
-            (product) => product.id !== deleteNoteId
-          );
+          const newData = data.filter((note) => note.id !== deleteNoteId);
           setData(newData);
         });
       }
     } catch (error) {
       console.error("Error:", error);
     }
-    /**
-     * Realiza una llamada a la API para obtener los datos de la tabla.
-     * Se ejecuta una vez al cargar el componente.
-     */
   };
   useEffect(() => {
-    fetch("/api/notes/")
+    // Verifica si estás en el navegador antes de acceder a localStorage
+    if (typeof window !== "undefined") {
+      setUserId(localStorage.getItem("userId"));
+    }
+  }, []);
+  useEffect(() => {
+    fetch(`/api/notes?userId=${userId}`)
       .then((response) => response.json())
       .then((data) => {
         setData(data);
         setIsPageLoaded(true);
       });
-  }, []);
-
+  }, [userId]);
+  
   return (
     <div
       id="padre"
-      className="flex justify-center h-full"
+      className="flex justify-center h-full "
     >
       <div className="fixed w-full">
         <Avatar
@@ -142,29 +143,33 @@ export default function Notes() {
       </div>
       <div
         id="NotesArea"
-        className="rounded-3xl grid grid-cols-4 gap-14 gap-y-14 mt-28"
+        className="rounded-3xl grid grid-cols-4 gap-14 gap-y-14 mt-28 "
       >
         {data.map((note) => (
           <div
+            key={note.id}
             id="noteExample"
             className="rounded-3xl"
           >
             <div className="relative">
-            <button onClick={() => handleDelete(note.id)} className="absolute right-0 mr-4 mt-1">
-                    <DeleteIcon
-                      sx={{
-                        color: "gray",
-                        "&:hover": {
-                          color: "red",
-                        },
-                      }}
-                    />
-                  </button>
+              <button
+                onClick={() => handleDelete(note.id)}
+                className="absolute right-0 mr-4 mt-1"
+              >
+                <DeleteIcon
+                  sx={{
+                    color: "gray",
+                    "&:hover": {
+                      color: "red",
+                    },
+                  }}
+                />
+              </button>
             </div>
             <div className="text-4xl mt-8 mx-3">
               <h1>{note.title}</h1>
             </div>
-            <div className="mt-5 ml-4">
+            <div className="mt-5 ml-4 overflow-scroll">
               <p>{note.body}</p>
             </div>
           </div>

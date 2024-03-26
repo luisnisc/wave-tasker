@@ -1,4 +1,3 @@
-// src/app/pages/api/sales/[id].js
 import { connectToDatabase } from "../../../utils/mongodb";
 
 export default async function handler(req, res) {
@@ -10,22 +9,21 @@ export default async function handler(req, res) {
 
   switch (method) {
     case "PUT":
-      // Actualizar un producto por ID
       const update = req.body;
       try {
-        const updateProduct = await collection.findOneAndUpdate(
+        const updateNote = await collection.findOneAndUpdate(
           { id: id },
           { $set: update },
           { returnOriginal: false }
         );
         if (
-          !updateProduct ||
-          !updateProduct.lastErrorObject ||
-          !updateProduct.lastErrorObject.updatedExisting
+          !updateNote ||
+          !updateNote.lastErrorObject ||
+          !updateNote.lastErrorObject.updatedExisting
         )
         res.json({
           message: `Note: ${id} updated`,
-          product: updateProduct.value,
+          product: updateNote.value,
         });
       } catch (error) {
         console.error(error);
@@ -33,13 +31,12 @@ export default async function handler(req, res) {
       }
       break;
     case "DELETE":
-      // Eliminar un producto por ID
       try {
-        const deleteProduct = await collection.findOneAndDelete({ id: id });
+        const deleteNotes = await collection.findOneAndDelete({ id: id });
         if (
-          !deleteProduct ||
-          !deleteProduct.lastErrorObject ||
-          deleteProduct.lastErrorObject.n === 0
+          !deleteNotes ||
+          !deleteNotes.lastErrorObject ||
+          deleteNotes.lastErrorObject.n === 0
         ) 
         res.json({ message: `Note: ${id} deleted` });
       } catch (error) {

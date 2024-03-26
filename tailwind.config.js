@@ -14,10 +14,17 @@ module.exports = {
       },
       colors: {
         "gray-500": "#808080",
+        "placeholder-color": "black",
+        "gray-120":"#acacac"
       },
       width:{
         '972' : '972px',
       }
+    },
+  },
+  variants: {
+    extend: {
+      textColor: ['placeholder']
     },
   },
   plugins: [],

@@ -1,4 +1,3 @@
-// src/app/pages/api/tasks/index.js
 import { connectToDatabase } from "../../../utils/mongodb";
 
 export default async function handler(req, res) {
@@ -7,16 +6,17 @@ export default async function handler(req, res) {
 
     switch (method) {
         case "GET":
-            // Obtener todas las tareas
-            const tasks = await db.collection("tasks").find({}).toArray();
+            // Obtener todas las tareas para el usuario específico
+            const tasks = await db.collection("tasks").find({ userId: req.query.userId }).toArray();
             res.json(tasks);
             break;
         case "POST":
-            // Añadir una nueva tarea
+            // Añadir una nueva tarea para el usuario específico
             const count = await db.collection("tasks").countDocuments();
             const newTask = {
                 id: count + 1,
                 task: req.body.task,
+                userId: req.body.userId, // Asegúrate de que el ID del usuario se envía desde el cliente
                 // Asegúrate de que los campos adicionales que necesitas estén aquí
             };
             await db.collection("tasks").insertOne(newTask);

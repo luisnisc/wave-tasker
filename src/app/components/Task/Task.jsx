@@ -19,6 +19,7 @@ export default function Task() {
   const [menuIconOpen, setMenuIconOpen] = useState(false);
   const [taskChecked, setTaskChecked] = useState(false);
   const [isPageLoaded, setIsPageLoaded] = useState(false);
+  const [userId, setUserId] = useState("");
   const [data, setData] = useState([]);
   const [task, setTask] = useState("");
   const handleDelete = async (id) => {
@@ -84,7 +85,7 @@ export default function Task() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ task }),
+        body: JSON.stringify({ task, userId }),
       });
 
       if (!response.ok) {
@@ -116,18 +117,31 @@ export default function Task() {
     }
   };
   const handleCheck = (id) => {
-    setData(data.map(task => task.id === id ? { ...task, checked: !task.checked } : task));
+    setData(
+      data.map((task) =>
+        task.id === id ? { ...task, checked: !task.checked } : task
+      )
+    );
   };
   useEffect(() => {
-    fetch("/api/tasks/")
+    // Verifica si estás en el navegador antes de acceder a localStorage
+    if (typeof window !== 'undefined') {
+      setUserId(localStorage.getItem('userId'));
+    }
+  }, []);
+  useEffect(() => {
+    fetch(`/api/tasks?userId=${userId}`)
       .then((response) => response.json())
       .then((data) => {
         // Añade la propiedad 'checked' a cada tarea
-        const tasksWithChecked = data.map(task => ({ ...task, checked: false }));
+        const tasksWithChecked = data.map((task) => ({
+          ...task,
+          checked: false,
+        }));
         setData(tasksWithChecked);
         setIsPageLoaded(true);
       });
-  }, []);
+  }, [userId]);
   useEffect(() => {
     setIsPageLoaded(true);
   }, []);
@@ -139,9 +153,7 @@ export default function Task() {
     >
       <Avatar
         id="avatar"
-        className={`absolute top-0 left-0 m-5 scale-125 ${
-          isPageLoaded ? "visible" : "invisible"
-        }`}
+        className="absolute top-0 left-0 m-5 scale-125"
         src="/Eustaquio.jpg"
       />
       <div className="absolute top-0 right-0 m-5 text-4xl mr-7">
@@ -183,14 +195,15 @@ export default function Task() {
       </div>
       <div
         id="taskBackground"
-        className="rounded-3xl relative"
+        className="rounded-3xl flex flex-col h-screen"
       >
         <div
           id=" taskArea"
-          className="w-full flex flex-col items-center mt-4"
+          className="w-full overflow-auto mt-4 "
         >
           {data.map((task) => (
             <div
+              key={task.id}
               id="task"
               className=" h-9 mt-6 w-972 rounded-3xl pl-4 pt-1 text-xl relative"
             >
@@ -227,21 +240,22 @@ export default function Task() {
             </div>
           ))}
         </div>
-        <form onSubmit={handleSubmit}>
-          <div>
+        <div className="relative ">
+          <form onSubmit={handleSubmit}>
             <input
               type="text"
               id="inputTask"
-              className="absolute w-full bottom-0 rounded-b-3xl p-4 h-10 focus:border-black focus:outline-none focus:border-2"
+              className="absolute bottom-0 w-full rounded-b-3xl p-4 h-10 opacity-80 focus:border-black focus:outline-none focus:border-2 focus:opacity-100"
               placeholder="Add a task"
               value={task}
               onChange={(e) => setTask(e.target.value)}
+              required={true}
             />
             <button type="submit">
               <AddCircleOutlineIcon className="absolute right-2 bottom-2" />
             </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );

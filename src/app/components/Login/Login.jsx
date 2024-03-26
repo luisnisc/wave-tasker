@@ -3,7 +3,11 @@ import React from "react";
 import { useState } from "react";
 import "../../../../styles/Login.css";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import Swal from "sweetalert2";
+import axios from "axios";
 export default function Login() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [passwordInput, setPasswordInput] = useState("password");
 
   const handlePasswordVisibility = () => {
@@ -11,6 +15,33 @@ export default function Login() {
       setPasswordInput("text");
     } else {
       setPasswordInput("password");
+    }
+  };
+  const handleLogin = async (event) => {
+    event.preventDefault();
+  
+    try {
+      const response = await axios.post('/api/login', { username, password });
+  
+      if (response.status === 200) {
+        // Authentication was successful. Redirect the user to the home page.
+        localStorage.setItem('userId', response.data.id);
+        window.location.href = '/task';
+      } else {
+        // Authentication failed. Show an error message.
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Invalid username or password!',
+        });
+      }
+    } catch (error) {
+      // An error occurred. Show an error message.
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong!',
+      });
     }
   };
   return (
@@ -24,7 +55,7 @@ export default function Login() {
         className="text-black border border-solid rounded-xl flex justify-center"
       >
         <form
-          action=""
+          onSubmit={handleLogin}
           className=""
         >
           <div className="mt-8">
@@ -38,6 +69,8 @@ export default function Login() {
                 type="text"
                 id="username"
                 className="border border-solid rounded-xl h-10 w-64 p-2 border-gray-300 focus:border-black focus:outline-none focus:border-2"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </label>
           </div>
@@ -54,6 +87,8 @@ export default function Login() {
                   type={passwordInput}
                   id="password"
                   className="border border-solid rounded-xl h-10 w-64 pr-10 pl-2 border-gray-300 focus:border-black focus:outline-none focus:border-2"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 
                 <VisibilityIcon onClick={handlePasswordVisibility} sx={{color:"gray"}} className="absolute right-2 top-1/2 transform -translate-y-1/2" />

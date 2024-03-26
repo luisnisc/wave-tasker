@@ -8,6 +8,7 @@ import "../../../../styles/AddNoteForm.css";
 export default function AddNoteForm() {
     const [data, setData] = useState([]);
     const [title, setTitle] = useState("");
+    const [userId, setUserId] = useState("");
   const [body, setBody] = useState("");
   
 
@@ -23,25 +24,18 @@ export default function AddNoteForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ title, body }),
+        body: JSON.stringify({ title, body, userId }),
       });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       } else {
-        console.log(
-          "Title: " +
-            title +
-            "Body: " +
-            body +
-
-            " añadido"
-        );
-        const newProduct = await response.json();
-        console.log(newProduct);
+        console.log("Note: " + title + " added");
+        const newNote = await response.json();
+        console.log(newNote);
 
         Swal.fire({
-          title: "Note added successfully!",
+          title: "Task added successfully!",
           text: "",
           icon: "success",
           confirmButtonText: "OK",
@@ -52,15 +46,18 @@ export default function AddNoteForm() {
             title: "sweet-alert-title",
             content: "sweet-alert-content",
           },
-        }).then(() => {
-            window.location.href = "/notes";
-        });
+        })
       }
     } catch (error) {
       console.error("Error:", error);
     }
   };
-
+  useEffect(() => {
+    // Verifica si estás en el navegador antes de acceder a localStorage
+    if (typeof window !== 'undefined') {
+      setUserId(localStorage.getItem('userId'));
+    }
+  }, []);
   useEffect(() => {
     /**
      * Obtiene los datos de productos desde el servidor.
@@ -112,6 +109,7 @@ export default function AddNoteForm() {
                   className=" w-80 h-12 rounded-2xl border-2 p-2 border-gray-300 focus:border-black focus:outline-none focus:border-2"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
+                  required={true}
                 />
               </div>
             </label>
@@ -126,6 +124,7 @@ export default function AddNoteForm() {
                   className=" w-80 h-60 rounded-2xl border-2 border-gray-300 p-2 focus:border-black focus:outline-none focus:border-2 resize-none"
                   value={body}
                   onChange={(e) => setBody(e.target.value)}
+                  required={true}
                 />
               </div>
             </label>
