@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Swal from "sweetalert2";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo} from "react";
 import Avatar from "@mui/material/Avatar";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -18,6 +18,8 @@ export default function Notes(initialData) {
   const [data, setData] = useState([initialData]);
   const [menuIconOpen, setMenuIconOpen] = useState(false);
   const [userId, setUserId] = useState("");
+  const [username, setUsername] = useState("");
+  const [randomColor, setRandomColor] = useState("");
   const handleDelete = async (id) => {
     event.preventDefault();
 
@@ -72,18 +74,19 @@ export default function Notes(initialData) {
   useEffect(() => {
     // Verifica si estás en el navegador antes de acceder a localStorage
     if (typeof window !== "undefined") {
-      setUserId(localStorage.getItem("userId"));
+      const userIdFromLocalStorage = localStorage.getItem("userId");
+      setUserId(userIdFromLocalStorage);
+      setUsername(localStorage.getItem("username"));
+      setRandomColor(localStorage.getItem("randomColor"));
+  
+      // Llama a la API después de que el userId se ha establecido
+      fetch(`/api/notes?userId=${userIdFromLocalStorage}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setData(data);
+        });
     }
   }, []);
-  useEffect(() => {
-    fetch(`/api/notes?userId=${userId}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setData(data);
-      });
-  }, [userId]);
-
-
   return (
     <div
       id="padre"
@@ -92,9 +95,13 @@ export default function Notes(initialData) {
       <div className="fixed w-full">
         <Avatar
           id="avatar"
-          className={`absolute top-0 left-0 m-5 scale-125`}
-          src="/Eustaquio.jpg"
-        />
+          className="absolute top-0 left-0 m-5 scale-125"
+          sx={{
+            backgroundColor: randomColor,
+          }}
+        >
+          {username.charAt(0).toUpperCase()}
+        </Avatar>
         <div className="absolute top-0 right-0 m-5 text-4xl mr-7">
           <a href="/add-note-form">
             <button>

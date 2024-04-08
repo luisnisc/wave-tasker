@@ -4,31 +4,29 @@ export default async function handler(req, res) {
   const { method } = req;
   const { db } = await connectToDatabase();
   const collection = db.collection("tasks");
-  const { id: idString } = req.query;
-  const id = Number(idString);
+  const id = Number(req.query.id);
 
   switch (method) {
     case "PUT":
       const update = req.body;
       delete update._id; // Elimina el campo _id del objeto update
       try {
+        const task = await collection.findOne({ id: id });
+        if (!task) {
+          res.status(404).json({ message: `Task: ${id} not found` });
+          return;
+        }
+
         const updateTask = await collection.findOneAndUpdate(
-          { id: id}, // busca por 'id' y 'userId'
+          { id: id }, // busca por 'id' y 'userId'
           { $set: update },
           { returnOriginal: false }
         );
-        if (
-          !updateTask ||
-          !updateTask.lastErrorObject ||
-          !updateTask.lastErrorObject.updatedExisting
-        ) {
-          res.status(404).json({ message: `Task: ${id} not found` });
-        } else {
-          res.json({
-            message: `Task: ${id} updated`,
-            task: updateTask.value,
-          });
-        }
+
+        res.json({
+          message: `Task: ${id} updated`,
+          task: updateTask.value,
+        });
       } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Error to update the task" });
@@ -38,7 +36,6 @@ export default async function handler(req, res) {
       try {
         const deleteNotes = await collection.findOneAndDelete({
           id: id,
-          userId: req.body.userId,
         });
         if (
           !deleteNotes ||

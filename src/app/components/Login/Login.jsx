@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import "../../../../styles/Login.css";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Swal from "sweetalert2";
@@ -9,7 +9,14 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordInput, setPasswordInput] = useState("password");
-
+  const randomColor = useMemo(() => {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }, []);
   const handlePasswordVisibility = () => {
     if (passwordInput === "password") {
       setPasswordInput("text");
@@ -26,6 +33,8 @@ export default function Login() {
       if (response.status === 200) {
         // Authentication was successful. Redirect the user to the home page.
         localStorage.setItem('userId', response.data.id);
+        localStorage.setItem('username', response.data.username);
+        localStorage.setItem('randomColor', randomColor);
         window.location.href = '/task';
       } else {
         // Authentication failed. Show an error message.

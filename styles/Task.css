@@ -3,14 +3,21 @@
   height: 760px;
   background-color: #5c5c5c;
 }
-#menu{
-    background-color: #d9d9d9;
-    height: 150px;
-    width: 133px;
+#menu {
+  background-color: #d9d9d9;
+  height: 150px;
+  width: 133px;
 }
-#inputTask{
-    background: #acacac;
+#inputTask {
+  background: #acacac;
 }
-#task{
-    background-color: #d9d9d9;
+#task {
+  background-color: #d9d9d9;
+}
+#inputTask::placeholder {
+  color: rgb(51, 51, 51);
+}
+
+#inputTask::-webkit-input-placeholder {
+  color: rgb(51, 51, 51);
 }

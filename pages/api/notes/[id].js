@@ -13,7 +13,7 @@ export default async function handler(req, res) {
       delete update._id; // Elimina el campo _id del objeto update
       try {
         const updateNote = await collection.findOneAndUpdate(
-          { id: id, userId: update.userId }, // busca por 'id' y 'userId'
+          { id: id}, // busca por 'id' y 'userId'
           { $set: update },
           { returnOriginal: false }
         );
@@ -35,7 +35,6 @@ export default async function handler(req, res) {
       try {
         const deleteNotes = await collection.findOneAndDelete({
           id: id,
-          userId: req.body.userId,
         });
         if (
           !deleteNotes ||

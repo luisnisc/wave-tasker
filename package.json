@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -H 0.0.0.0",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -13,14 +13,19 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.14",
     "@mui/material": "^5.15.14",
+    "aws4": "^1.12.0",
     "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
+    "moment": "^2.30.1",
     "mongodb": "^6.5.0",
     "mongoose": "^8.2.3",
     "next": "14.1.4",
     "react": "^18",
+    "react-big-calendar": "^1.11.2",
+    "react-calendar": "^4.8.0",
     "react-dom": "^18",
+    "react-use": "^17.5.0",
     "sweetalert2": "^11.10.7",
     "tailwind-scrollbar": "^3.1.0"
   },

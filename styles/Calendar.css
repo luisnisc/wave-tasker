@@ -1,0 +1,52 @@
+#padre {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+}
+#menu {
+    background-color: #d9d9d9;
+    height: 150px;
+    width: 133px;
+  }
+#calendarContainer {
+  width: 1106px;
+}
+#calendar .rbc-row {
+  display: grid;
+  grid-template-columns: repeat(7, 158px);
+}
+
+#calendar .rbc-date-cell,
+#padre .rbc-row-segment {
+  width: 158px;
+  height: 151px;
+}
+
+#calendar .rbc-time-content,
+#padre .rbc-day-slot {
+  height: 151px;
+}
+.rbc-toolbar .rbc-btn-group:first-child,
+.rbc-toolbar .rbc-btn-group:last-child {
+  display: none;
+}
+.rbc-toolbar {
+  color: white;
+}
+.rbc-header {
+  color: white;
+}
+#calendar .rbc-month-row:nth-child(odd) .rbc-date-cell:nth-child(odd),
+#calendar .rbc-month-row:nth-child(even) .rbc-date-cell:nth-child(even) {
+  background-color: #d9d9d9;
+}
+
+#calendar .rbc-month-row:nth-child(odd) .rbc-date-cell:nth-child(even),
+#calendar .rbc-month-row:nth-child(even) .rbc-date-cell:nth-child(odd) {
+    background-color: #ffffff;
+}
+.rounded-calendar {
+  border-radius: 1.5rem;
+}

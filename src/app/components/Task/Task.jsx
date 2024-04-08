@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Avatar from "@mui/material/Avatar";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -13,15 +13,40 @@ import { Dropdown } from "@mui/base/Dropdown";
 import { MenuButton } from "@mui/base/MenuButton";
 import { Menu } from "@mui/base/Menu";
 import { MenuItem } from "@mui/base/MenuItem";
-
 import "../../../../styles/Task.css";
+import { set } from "mongoose";
 export default function Task() {
   const [menuIconOpen, setMenuIconOpen] = useState(false);
   const [taskChecked, setTaskChecked] = useState(false);
   const [isPageLoaded, setIsPageLoaded] = useState(false);
   const [userId, setUserId] = useState("");
+  const [username, setUsername] = useState("");
+  const [randomColor, setRandomColor] = useState("");
   const [data, setData] = useState([]);
   const [task, setTask] = useState("");
+  const menuIcon = menuIconOpen ? "rounded-2xl pl-4 pt-3 mt-1" : "hidden";
+  console.log(randomColor);
+  useEffect(() => {
+    // Verifica si estás en el navegador antes de acceder a localStorage
+    if (typeof window !== "undefined") {
+      const userIdFromLocalStorage = localStorage.getItem("userId");
+      setUserId(userIdFromLocalStorage);
+      setUsername(localStorage.getItem("username"));
+      setRandomColor(localStorage.getItem("randomColor"));
+
+      // Llama a la API después de que el userId se ha establecido
+      fetch(`/api/tasks?userId=${userIdFromLocalStorage}`)
+        .then((response) => response.json())
+        .then((data) => {
+          // Añade la propiedad 'checked' a cada tarea
+          const tasksWithChecked = data.map((task) => ({
+            ...task,
+          }));
+          setData(tasksWithChecked);
+          setIsPageLoaded(true);
+        });
+    }
+  }, []);
   const handleDelete = async (id) => {
     event.preventDefault();
 
@@ -85,7 +110,7 @@ export default function Task() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ task, userId }),
+        body: JSON.stringify({ task, userId, checked: false }),
       });
 
       if (!response.ok) {
@@ -117,7 +142,7 @@ export default function Task() {
     }
   };
   const handleCheck = async (id) => {
-    console.log(id)
+    console.log(data);
     const taskToCheck = data.find((task) => Number(task.id) === id);
     if (!taskToCheck) {
       console.error(`Task with id ${id} not found`);
@@ -139,39 +164,15 @@ export default function Task() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const updatedTaskFromServer = await response.json();
-
+      // Aquí es donde se actualiza el estado con la tarea actualizada
       setData(
-        data.map((task) =>
-          Number(task.id) === id ? updatedTaskFromServer : task
-        )
+        data.map((task) => (Number(task.id) === id ? updatedTask : task))
       );
     } catch (error) {
       console.error("Error:", error);
     }
   };
-  useEffect(() => {
-    // Verifica si estás en el navegador antes de acceder a localStorage
-    if (typeof window !== 'undefined') {
-      setUserId(localStorage.getItem('userId'));
-    }
-  }, []);
-  useEffect(() => {
-    fetch(`/api/tasks?userId=${userId}`)
-      .then((response) => response.json())
-      .then((data) => {
-        // Añade la propiedad 'checked' a cada tarea
-        const tasksWithChecked = data.map((task) => ({
-          ...task,
-          checked: false,
-        }));
-        setData(tasksWithChecked);
-        setIsPageLoaded(true);
-      });
-  }, [userId]);
-  useEffect(() => {
-    setIsPageLoaded(true);
-  }, []);
+
   return (
     <div
       id="padre"
@@ -180,8 +181,12 @@ export default function Task() {
       <Avatar
         id="avatar"
         className="absolute top-0 left-0 m-5 scale-125"
-        src="/Eustaquio.jpg"
-      />
+        sx={{
+          backgroundColor: randomColor,
+        }}
+      >
+        {username.charAt(0).toUpperCase()}
+      </Avatar>
       <div className="absolute top-0 right-0 m-5 text-4xl mr-7">
         <Dropdown>
           <MenuButton onClick={() => setMenuIconOpen(!menuIconOpen)}>
@@ -197,26 +202,29 @@ export default function Task() {
               />
             )}
           </MenuButton>
-          <Menu
-            id="menu"
-            className="rounded-2xl pl-4 pt-3 mt-1"
-          >
-            <MenuItem className="text-lg">
-              <a href="/task">
-                <button>Task</button>
-              </a>
-            </MenuItem>
-            <MenuItem className="mt-4 text-lg">
-              <a href="/calendar">
-                <button>Calendar</button>
-              </a>
-            </MenuItem>
-            <MenuItem className="mt-4 text-lg">
-              <a href="/notes">
-                <button>Notes</button>
-              </a>
-            </MenuItem>
-          </Menu>
+          {menuIconOpen && (
+            <Menu
+              id="menu"
+              className="rounded-2xl pl-4 pt-3 mt-1"
+              onClose={() => setMenuIconOpen(false)} // Aquí es donde se cierra el menú
+            >
+              <MenuItem className="text-lg">
+                <a href="/task">
+                  <button>Task</button>
+                </a>
+              </MenuItem>
+              <MenuItem className="mt-4 text-lg">
+                <a href="/calendar">
+                  <button>Calendar</button>
+                </a>
+              </MenuItem>
+              <MenuItem className="mt-4 text-lg">
+                <a href="/notes">
+                  <button>Notes</button>
+                </a>
+              </MenuItem>
+            </Menu>
+          )}
         </Dropdown>
       </div>
       <div
@@ -249,7 +257,7 @@ export default function Task() {
                     )}
                   </button>
                 )}
-                <span className={task.checked? "ml-8 line-through" : "ml-8"}>
+                <span className={task.checked ? "ml-8 line-through" : "ml-8"}>
                   {task.task}
                 </span>
                 {task.task && (
@@ -271,7 +279,7 @@ export default function Task() {
             <input
               type="text"
               id="inputTask"
-              className="w-full rounded-b-3xl p-4 h-10 opacity-80 focus:border-black focus:outline-none focus:border-2 focus:opacity-100"
+              className="w-full rounded-b-3xl p-4 h-10 opacity-80 focus:border-black focus:outline-none focus:border-2 focus:opacity-100 input-placeholder"
               placeholder="Add a task"
               value={task}
               onChange={(e) => setTask(e.target.value)}

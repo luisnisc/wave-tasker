@@ -7,20 +7,20 @@ export default async function handler(req, res) {
     switch (method) {
         case "GET":
             // Obtener todas las tareas para el usuario específico
-            const tasks = await db.collection("tasks").find({ userId: req.query.userId }).toArray();
-            res.json(tasks);
+              const notes = await db.collection("events").find({ userId: req.query.userId}).toArray();
+            res.json(notes);
             break;
         case "POST":
             // Añadir una nueva tarea para el usuario específico
-            const count = await db.collection("tasks").countDocuments();
-            const newTask = {
+            const count = await db.collection("events").countDocuments();
+            const newNote = {
                 id: count + 1,
-                task: req.body.task,
-                userId: req.body.userId, 
-                checked: req.body.checked
+                event: req.body.event,
+                userId: req.body.userId, // Asegúrate de que el ID del usuario se envía desde el cliente
+                // Asegúrate de que los campos adicionales que necesitas estén aquí
             };
-            await db.collection("tasks").insertOne(newTask);
-            res.status(201).json(newTask);
+            await db.collection("events").insertOne(newNote);
+            res.status(201).json(newNote);
             break;
             
         default:
