@@ -144,6 +144,11 @@ export default function Notes(initialData) {
                   <button>Notes</button>
                 </a>
               </MenuItem>
+              <MenuItem className="mt-4 text-lg">
+                <a href="/">
+                  <button>Log out</button>
+                </a>
+              </MenuItem>
             </Menu>
           </Dropdown>
         </div>

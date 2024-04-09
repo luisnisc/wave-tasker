@@ -157,7 +157,7 @@ export default function Task() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(updatedTask),
+        body: JSON.stringify( updatedTask ),
       });
 
       if (!response.ok) {
@@ -221,6 +221,11 @@ export default function Task() {
               <MenuItem className="mt-4 text-lg">
                 <a href="/notes">
                   <button>Notes</button>
+                </a>
+              </MenuItem>
+              <MenuItem className="mt-4 text-lg">
+                <a href="/">
+                  <button>Log out</button>
                 </a>
               </MenuItem>
             </Menu>
