@@ -12,10 +12,17 @@ export default function Signin() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const handlePasswordVisibility = () => {
-    if (passwordInput === "password" || confirmPasswordInput === "password") {
+    if (passwordInput === "password") {
       setPasswordInput("text");
     } else {
       setPasswordInput("password");
+    }
+  };
+  const handleConfirmPasswordVisibility = () => {
+    if (confirmPasswordInput === "password") {
+      setConfirmPasswordInput("text");
+    } else {
+      setConfirmPasswordInput("password");
     }
   };
   const handleSubmit = async (event) => {
@@ -157,7 +164,7 @@ export default function Signin() {
                 />
 
                 <VisibilityIcon
-                  onClick={handlePasswordVisibility}
+                  onClick={handleConfirmPasswordVisibility}
                   sx={{ color: "gray" }}
                   className="absolute right-2 top-1/2 transform -translate-y-1/2"
                 />

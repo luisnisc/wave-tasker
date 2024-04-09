@@ -49,7 +49,7 @@ export default function Login() {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        html: '<p style="color: #ffffff;">User not found</p>',
+        html: '<p style="color: #ffffff;">Something has goes wrong</p>',
         confirmButtonText: "OK",
         confirmButtonColor: "#de6d6d",
         background: "#272727",
@@ -113,7 +113,7 @@ export default function Login() {
               </div>
             </label>
             <a
-              href=""
+              href="/forgotYourPassword"
               className="text-sm"
             >
               Forgot Password?
