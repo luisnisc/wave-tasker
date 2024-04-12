@@ -12,6 +12,7 @@ import { MenuButton } from "@mui/base/MenuButton";
 import { Menu } from "@mui/base/Menu";
 import { MenuItem } from "@mui/base/MenuItem";
 import "../../../../styles/Calendar.css";
+import AvatarCustom from "../Avatar/AvatarCustom";
 
 moment.updateLocale("es", { week: { dow: 1 } });
 const localizer = momentLocalizer(moment);
@@ -63,14 +64,13 @@ export default function MyCalendar() {
   const [date, setDate] = useState(new Date());
   const [showForm, setShowForm] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [events, setEvents] = useState([]);
   const [hour, setHour] = useState("");
   const [event, setEvent] = useState("");
   const [userId, setUserId] = useState("");
   const [username, setUsername] = useState("");
   const [randomColor, setRandomColor] = useState("");
   const [menuIconOpen, setMenuIconOpen] = useState(false);
-
+  const [events, setEvents] = useState([]);
   useEffect(() => {
     // Verifica si estás en el navegador antes de acceder a localStorage
     if (typeof window !== "undefined") {
@@ -78,33 +78,85 @@ export default function MyCalendar() {
       setUserId(userIdFromLocalStorage);
       setUsername(localStorage.getItem("username"));
       setRandomColor(localStorage.getItem("randomColor"));
+  
+      // Carga los eventos desde localStorage
+      const eventsFromLocalStorage = localStorage.getItem("events");
+      if (eventsFromLocalStorage) {
+        const parsedEvents = JSON.parse(eventsFromLocalStorage);
+        // Convierte las fechas de inicio y fin a objetos Date
+        const eventsWithDates = parsedEvents.map(event => ({
+          ...event,
+          start: new Date(event.start),
+          end: new Date(event.end),
+        }));
+        setEvents(eventsWithDates);
+      }
     }
   }, []);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  const [hours, minutes] = hour.split(":").map(Number);
+  
+  // Verifica que 'selectedDate' es un objeto Date válido
+  if (Object.prototype.toString.call(selectedDate) === "[object Date]") {
+    if (isNaN(selectedDate.getTime())) {  // selectedDate no es una fecha válida
+      console.error("selectedDate is not a valid Date object");
+      return;
+    }
+  } else {  // selectedDate no es un objeto Date
+    console.error("selectedDate is not a Date object");
+    return;
+  }
 
-    const newEvent = {
-      title: event,
-      start: selectedDate,
-      end: selectedDate,
-    };
+  const start = new Date(selectedDate);
+  start.setUTCHours(hours, minutes);
+  const end = new Date(start);
+  end.setUTCHours(start.getUTCHours() + 1);
 
-    setEvents((prevEvents) => [...prevEvents, newEvent]);
-    setShowForm(false);
+  const newEvent = {
+    title: event,
+    start: start,
+    end: end,
   };
-  console.log(showForm);
+
+  // Actualiza el estado y almacena los eventos en localStorage
+  setEvents((prevEvents) => {
+    const updatedEvents = [...prevEvents, newEvent];
+    localStorage.setItem("events", JSON.stringify(updatedEvents));
+    return updatedEvents;
+  });
+
+  setShowForm(false);
+};
+  const handleSelectEvent = (event) => {
+    setSelectedDate(event.start);
+    setShowForm(true);
+  };
+  const handleSelectSlot = (slotInfo) => {
+    console.log(slotInfo);
+  
+    // Extrae la fecha y la hora de slotInfo.start
+    const year = slotInfo.start.getFullYear();
+    const month = slotInfo.start.getMonth();
+    const date = slotInfo.start.getDate();
+    const hours = slotInfo.start.getHours();
+    const minutes = slotInfo.start.getMinutes();
+  
+    // Construye un nuevo objeto Date con la fecha y la hora locales
+    const localDate = new Date(year, month, date, hours, minutes);
+    
+    setSelectedDate(localDate);
+    setShowForm(true);
+    console.log(localDate)
+  };
+  
+  
   return (
     <div id="padre">
-      <Avatar
-        id="avatar"
-        className="absolute top-0 left-0 m-5 scale-125"
-        sx={{
-          backgroundColor: randomColor,
-        }}
-      >
-        {username.charAt(0).toUpperCase()}
-      </Avatar>
+      <AvatarCustom/>
+        
+    
       <div className="absolute top-0 right-0 m-5 text-4xl mr-7">
         <Dropdown>
           <MenuButton onClick={() => setMenuIconOpen(!menuIconOpen)}>
@@ -140,10 +192,10 @@ export default function MyCalendar() {
               </a>
             </MenuItem>
             <MenuItem className="mt-4 text-lg">
-                <a href="/">
-                  <button>Log out</button>
-                </a>
-              </MenuItem>
+              <a href="/">
+                <button>Log out</button>
+              </a>
+            </MenuItem>
           </Menu>
         </Dropdown>
       </div>
@@ -172,31 +224,15 @@ export default function MyCalendar() {
                 />
               ),
             }}
+            onSelectEvent={handleSelectEvent}
+            onSelectSlot={handleSelectSlot}
             selectable={true}
-            onSelectEvent={(event) => {
-              console.log("Event selected:", event);
-              setSelectedDate(event.start);
+            onDrillDown={(date) => {
+              setSelectedDate(date);
               setShowForm(true);
             }}
-            onSelectSlot={(slotInfo) => {
-              console.log("Slot selected:", slotInfo.start);
-              setSelectedDate(slotInfo.start);
-              setShowForm(true);
-            }}
+
           />
-          {showForm && (
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
-                zIndex: 1,
-              }}
-            />
-          )}
           {showForm && (
             <div
               style={{

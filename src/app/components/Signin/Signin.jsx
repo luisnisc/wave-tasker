@@ -102,6 +102,7 @@ export default function Signin() {
                 className="border border-solid rounded-xl h-10 w-64 p-2 border-gray-300 focus:border-black focus:outline-none focus:border-2"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required={true}
               />
             </label>
           </div>
@@ -118,6 +119,7 @@ export default function Signin() {
                 className="border border-solid rounded-xl h-10 w-64 p-2 border-gray-300 focus:border-black focus:outline-none focus:border-2"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                required={true}
               />
             </label>
           </div>
@@ -136,6 +138,7 @@ export default function Signin() {
                   className="border border-solid rounded-xl h-10 w-64 pr-10 pl-2 border-gray-300 focus:border-black focus:outline-none focus:border-2"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  required={true}
                 />
 
                 <VisibilityIcon
@@ -161,6 +164,7 @@ export default function Signin() {
                   className="border border-solid rounded-xl h-10 w-64 pr-10 pl-2 border-gray-300 focus:border-black focus:outline-none focus:border-2"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
+                  required={true}
                 />
 
                 <VisibilityIcon

@@ -13,6 +13,7 @@ import { Menu } from "@mui/base/Menu";
 import { MenuItem } from "@mui/base/MenuItem";
 
 import "../../../../styles/Notes.css";
+import AvatarCustom from "../Avatar/AvatarCustom";
 
 export default function Notes(initialData) {
   const [data, setData] = useState([initialData]);
@@ -93,15 +94,7 @@ export default function Notes(initialData) {
       className="flex justify-center h-full "
     >
       <div className="fixed w-full">
-        <Avatar
-          id="avatar"
-          className="absolute top-0 left-0 m-5 scale-125"
-          sx={{
-            backgroundColor: randomColor,
-          }}
-        >
-          {username.charAt(0).toUpperCase()}
-        </Avatar>
+        <AvatarCustom/>
         <div className="absolute top-0 right-0 m-5 text-4xl mr-7">
           <a href="/add-note-form">
             <button>

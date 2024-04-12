@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useState, useEffect, useMemo } from "react";
-import Avatar from "@mui/material/Avatar";
+import AvatarCustom from "../Avatar/AvatarCustom"
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -25,7 +25,6 @@ export default function Task() {
   const [data, setData] = useState([]);
   const [task, setTask] = useState("");
   const menuIcon = menuIconOpen ? "rounded-2xl pl-4 pt-3 mt-1" : "hidden";
-  console.log(randomColor);
   useEffect(() => {
     // Verifica si estás en el navegador antes de acceder a localStorage
     if (typeof window !== "undefined") {
@@ -178,15 +177,7 @@ export default function Task() {
       id="padre"
       className="flex flex-col justify-center items-center h-screen"
     >
-      <Avatar
-        id="avatar"
-        className="absolute top-0 left-0 m-5 scale-125"
-        sx={{
-          backgroundColor: randomColor,
-        }}
-      >
-        {username.charAt(0).toUpperCase()}
-      </Avatar>
+      <AvatarCustom/>
       <div className="absolute top-0 right-0 m-5 text-4xl mr-7">
         <Dropdown>
           <MenuButton onClick={() => setMenuIconOpen(!menuIconOpen)}>
@@ -244,11 +235,11 @@ export default function Task() {
             <div
               key={task.id}
               id="task"
-              className=" h-9 mt-6 w-972 rounded-3xl pl-4 pt-1 text-xl relative"
+              className=" h-max mt-6 w-972 rounded-3xl pl-4 pt-1 text-xl relative break-words"
             >
               <div id="taskText">
                 {task.task && (
-                  <button onClick={() => handleCheck(task.id)}>
+                  <button onClick={() => handleCheck(task.id)} className="absolute left-0 top-0 ml-3">
                     {task.checked ? (
                       <CheckBoxIcon
                         className=""
@@ -268,7 +259,7 @@ export default function Task() {
                 {task.task && (
                   <button
                     onClick={() => handleDelete(task.id)}
-                    className="absolute right-0 mr-4 "
+                    className="absolute top-0 right-0 mr-4 "
                   >
                     <DeleteIcon
                       sx={{ color: "gray", "&:hover": { color: "red" } }}

@@ -49,7 +49,7 @@ export default function Login() {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        html: '<p style="color: #ffffff;">Something has goes wrong</p>',
+        html: '<p style="color: #ffffff;">Something had goes wrong</p>',
         confirmButtonText: "OK",
         confirmButtonColor: "#de6d6d",
         background: "#272727",
