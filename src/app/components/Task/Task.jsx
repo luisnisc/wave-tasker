@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useState, useEffect, useMemo } from "react";
-import AvatarCustom from "../Avatar/AvatarCustom"
+import AvatarCustom from "../Avatar/AvatarCustom";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -24,6 +24,8 @@ export default function Task() {
   const [randomColor, setRandomColor] = useState("");
   const [data, setData] = useState([]);
   const [task, setTask] = useState("");
+  const [changedTask, setChangedTask] = useState("");
+  const [showForm, setShowForm] = useState("null");
   const menuIcon = menuIconOpen ? "rounded-2xl pl-4 pt-3 mt-1" : "hidden";
   useEffect(() => {
     // Verifica si estás en el navegador antes de acceder a localStorage
@@ -46,6 +48,64 @@ export default function Task() {
         });
     }
   }, []);
+  const handleEdit = async (id) => {
+    event.preventDefault();
+    if(changedTask == ""){
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        html: '<p style="color: #ffffff;">Something was wrong!</p>',
+        footer: '<p style="color: #ffffff;">Task is empty</p>',
+        confirmButtonText: "OK",
+        confirmButtonColor: "#de6d6d",
+        background: "#272727",
+        customClass: {
+          confirmButton: "sweet-alert-button",
+          title: "sweet-alert-title",
+          content: "sweet-alert-content",
+        }}).then(() => {
+          setShowForm(null);
+      })
+    }
+    else{
+    try {
+      const response = await fetch(`/api/tasks/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ task: changedTask }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+        
+      }else {
+        Swal.fire({
+          title: "Task updated successfully!",
+          text: "",
+          icon: "success",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#a5dc86",
+          background: "#272727",
+          customClass: {
+            confirmButton: "sweet-alert-button",
+            title: "sweet-alert-title",
+            content: "sweet-alert-content",
+          },
+        }).then(() => {
+          const updatedTask = { id, task: changedTask };
+          const newData = data.map((task) => task.id === id ? updatedTask : task);
+          setShowForm(null);
+          setData(newData);
+          setChangedTask("");
+        });
+      }
+      console.log(`Task: ${id} updated`);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+  };
   const handleDelete = async (id) => {
     event.preventDefault();
 
@@ -156,7 +216,7 @@ export default function Task() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify( updatedTask ),
+        body: JSON.stringify(updatedTask),
       });
 
       if (!response.ok) {
@@ -177,7 +237,7 @@ export default function Task() {
       id="padre"
       className="flex flex-col justify-center items-center h-screen"
     >
-      <AvatarCustom/>
+      <AvatarCustom />
       <div className="absolute top-0 right-0 m-5 text-4xl mr-7">
         <Dropdown>
           <MenuButton onClick={() => setMenuIconOpen(!menuIconOpen)}>
@@ -237,9 +297,17 @@ export default function Task() {
               id="task"
               className=" h-max mt-6 w-972 rounded-3xl pl-4 pt-1 text-xl relative break-words"
             >
-              <div id="taskText">
+              <div
+                id="taskText"
+                onClick={() =>
+                  setShowForm(task.id === showForm ? null : task.id)
+                }
+              >
                 {task.task && (
-                  <button onClick={() => handleCheck(task.id)} className="absolute left-0 top-0 ml-3">
+                  <button
+                    onClick={() => handleCheck(task.id)}
+                    className="absolute left-0 top-0 ml-3"
+                  >
                     {task.checked ? (
                       <CheckBoxIcon
                         className=""
@@ -253,9 +321,29 @@ export default function Task() {
                     )}
                   </button>
                 )}
-                <span className={task.checked ? "ml-8 line-through" : "ml-8"}>
-                  {task.task}
-                </span>
+                {showForm === task.id ? (
+                  <div className="ml-7">
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        handleEdit(task.id);
+                      }}
+                      
+                    >
+                      <input
+                        type="text"
+                        value={changedTask}
+                        onChange={(e) => setChangedTask(e.target.value)}
+                        className="h-5 top-0"
+                        autoFocus
+                      />
+                    </form>
+                  </div>
+                ) : (
+                  <span className={task.checked ? "ml-8 line-through" : "ml-8"}>
+                    {task.task}
+                  </span>
+                )}
                 {task.task && (
                   <button
                     onClick={() => handleDelete(task.id)}
