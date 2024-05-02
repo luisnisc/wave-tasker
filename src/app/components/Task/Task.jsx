@@ -50,7 +50,7 @@ export default function Task() {
   }, []);
   const handleEdit = async (id) => {
     event.preventDefault();
-    if(changedTask == ""){
+    if (changedTask == "") {
       Swal.fire({
         icon: "error",
         title: "Oops...",
@@ -63,48 +63,49 @@ export default function Task() {
           confirmButton: "sweet-alert-button",
           title: "sweet-alert-title",
           content: "sweet-alert-content",
-        }}).then(() => {
-          setShowForm(null);
-      })
-    }
-    else{
-    try {
-      const response = await fetch(`/api/tasks/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ task: changedTask }),
+      }).then(() => {
+        setShowForm(null);
       });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-        
-      }else {
-        Swal.fire({
-          title: "Task updated successfully!",
-          text: "",
-          icon: "success",
-          confirmButtonText: "OK",
-          confirmButtonColor: "#a5dc86",
-          background: "#272727",
-          customClass: {
-            confirmButton: "sweet-alert-button",
-            title: "sweet-alert-title",
-            content: "sweet-alert-content",
+    } else {
+      try {
+        const response = await fetch(`/api/tasks/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
           },
-        }).then(() => {
-          const updatedTask = { id, task: changedTask };
-          const newData = data.map((task) => task.id === id ? updatedTask : task);
-          setShowForm(null);
-          setData(newData);
-          setChangedTask("");
+          body: JSON.stringify({ task: changedTask }),
         });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        } else {
+          Swal.fire({
+            title: "Task updated successfully!",
+            text: "",
+            icon: "success",
+            confirmButtonText: "OK",
+            confirmButtonColor: "#a5dc86",
+            background: "#272727",
+            customClass: {
+              confirmButton: "sweet-alert-button",
+              title: "sweet-alert-title",
+              content: "sweet-alert-content",
+            },
+          }).then(() => {
+            const updatedTask = { id, task: changedTask };
+            const newData = data.map((task) =>
+              task.id === id ? updatedTask : task
+            );
+            setShowForm(null);
+            setData(newData);
+            setChangedTask("");
+          });
+        }
+        console.log(`Task: ${id} updated`);
+      } catch (error) {
+        console.error("Error:", error);
       }
-      console.log(`Task: ${id} updated`);
-    } catch (error) {
-      console.error("Error:", error);
     }
-  }
   };
   const handleDelete = async (id) => {
     event.preventDefault();
@@ -303,24 +304,27 @@ export default function Task() {
                   setShowForm(task.id === showForm ? null : task.id)
                 }
               >
-                {task.task && (
-                  <button
-                    onClick={() => handleCheck(task.id)}
-                    className="absolute left-0 top-0 ml-3"
-                  >
-                    {task.checked ? (
-                      <CheckBoxIcon
-                        className=""
-                        sx={{ color: "gray" }}
-                      />
-                    ) : (
-                      <CheckBoxOutlineBlankIcon
-                        className=""
-                        sx={{ color: "gray" }}
-                      />
-                    )}
-                  </button>
-                )}
+                <div className="w-full">
+                  {task.task && (
+                    <button
+                      onClick={() => handleCheck(task.id)}
+                      className="absolute left-0 top-0 ml-3"
+                    >
+                      {task.checked ? (
+                        <CheckBoxIcon
+                          className=""
+                          sx={{ color: "gray" }}
+                        />
+                      ) : (
+                        <CheckBoxOutlineBlankIcon
+                          className=""
+                          sx={{ color: "gray" }}
+                        />
+                      )}
+                    </button>
+                  )}
+                </div>
+
                 {showForm === task.id ? (
                   <div className="ml-7">
                     <form
@@ -328,13 +332,12 @@ export default function Task() {
                         e.preventDefault();
                         handleEdit(task.id);
                       }}
-                      
                     >
                       <input
                         type="text"
                         value={changedTask}
                         onChange={(e) => setChangedTask(e.target.value)}
-                        className="h-5 top-0"
+                        className="h-5 top-0 border-gray-300 focus:border-black focus:outline-none focus:border-2"
                         autoFocus
                       />
                     </form>
@@ -344,17 +347,17 @@ export default function Task() {
                     {task.task}
                   </span>
                 )}
-                {task.task && (
-                  <button
-                    onClick={() => handleDelete(task.id)}
-                    className="absolute top-0 right-0 mr-4 "
-                  >
-                    <DeleteIcon
-                      sx={{ color: "gray", "&:hover": { color: "red" } }}
-                    />
-                  </button>
-                )}
               </div>
+              {task.task && (
+                <button
+                  onClick={() => handleDelete(task.id)}
+                  className="absolute top-0 right-0 mr-4 "
+                >
+                  <DeleteIcon
+                    sx={{ color: "gray", "&:hover": { color: "red" } }}
+                  />
+                </button>
+              )}
             </div>
           ))}
         </div>
