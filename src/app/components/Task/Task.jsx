@@ -300,9 +300,7 @@ export default function Task() {
             >
               <div
                 id="taskText"
-                onClick={() =>
-                  setShowForm(task.id === showForm ? null : task.id)
-                }
+               
               >
                 <div className="w-full">
                   {task.task && (
@@ -324,7 +322,12 @@ export default function Task() {
                     </button>
                   )}
                 </div>
-
+                <div
+                 onClick={() =>
+                  setShowForm(task.id === showForm ? null : task.id)
+                }
+                >
+                 
                 {showForm === task.id ? (
                   <div className="ml-7">
                     <form
@@ -339,6 +342,7 @@ export default function Task() {
                         onChange={(e) => setChangedTask(e.target.value)}
                         className="h-5 top-0 border-gray-300 focus:border-black focus:outline-none focus:border-2"
                         autoFocus
+                        onBlur={() => setShowForm(null)}
                       />
                     </form>
                   </div>
@@ -347,6 +351,8 @@ export default function Task() {
                     {task.task}
                   </span>
                 )}
+                 
+                 </div>
               </div>
               {task.task && (
                 <button
