@@ -5,12 +5,11 @@ import Avatar from "@mui/material/Avatar";
 import CloseIcon from "@mui/icons-material/Close";
 import Swal from "sweetalert2";
 import "../../../../styles/AddNoteForm.css";
+import AvatarCustom from "../Avatar/AvatarCustom";
 export default function AddNoteForm() {
   const [data, setData] = useState([]);
   const [title, setTitle] = useState("");
   const [userId, setUserId] = useState("");
-  const [username, setUsername] = useState("");
-  const [randomColor, setRandomColor] = useState("");
   const [body, setBody] = useState("");
 
   /**
@@ -36,7 +35,7 @@ export default function AddNoteForm() {
         console.log(newNote);
 
         Swal.fire({
-          title: "Task added successfully!",
+          title: "Note added successfully!",
           text: "",
           icon: "success",
           confirmButtonText: "OK",
@@ -60,8 +59,6 @@ export default function AddNoteForm() {
     // Verifica si estás en el navegador antes de acceder a localStorage
     if (typeof window !== "undefined") {
       setUserId(localStorage.getItem("userId"));
-      setUsername(localStorage.getItem("username"));
-      setRandomColor(localStorage.getItem("randomColor"));
     }
   }, []);
   useEffect(() => {
@@ -81,15 +78,7 @@ export default function AddNoteForm() {
       id="padre"
       className="flex justify-center items-center h-screen "
     >
-      <Avatar
-        id="avatar"
-        className={`absolute top-0 left-0 m-5 scale-125`}
-        sx={{
-          backgroundColor: randomColor,
-        }}
-        >
-          {username.charAt(0).toUpperCase()}
-        </Avatar>
+      <AvatarCustom/>
      
       <div className="absolute top-0 right-0 m-5 text-4xl mr-7">
         <a href="/notes">

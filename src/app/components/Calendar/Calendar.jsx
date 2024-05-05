@@ -71,6 +71,7 @@ export default function MyCalendar() {
   const [randomColor, setRandomColor] = useState("");
   const [menuIconOpen, setMenuIconOpen] = useState(false);
   const [events, setEvents] = useState([]);
+  console
   useEffect(() => {
     // Verifica si estás en el navegador antes de acceder a localStorage
     if (typeof window !== "undefined") {
@@ -95,47 +96,47 @@ export default function MyCalendar() {
   }, []);
 
   const handleSubmit = (e) => {
-  e.preventDefault();
-  const [hours, minutes] = hour.split(":").map(Number);
+    e.preventDefault();
+    const [hours, minutes] = hour.split(":").map(Number);
   
-  // Verifica que 'selectedDate' es un objeto Date válido
-  if (Object.prototype.toString.call(selectedDate) === "[object Date]") {
-    if (isNaN(selectedDate.getTime())) {  // selectedDate no es una fecha válida
-      console.error("selectedDate is not a valid Date object");
+    // Verifica que 'selectedDate' es un objeto Date válido
+    if (Object.prototype.toString.call(selectedDate) === "[object Date]") {
+      if (isNaN(selectedDate.getTime())) {  // selectedDate no es una fecha válida
+        console.error("selectedDate is not a valid Date object");
+        return;
+      }
+    } else {  // selectedDate no es un objeto Date
+      console.error("selectedDate is not a Date object");
       return;
     }
-  } else {  // selectedDate no es un objeto Date
-    console.error("selectedDate is not a Date object");
-    return;
-  }
-
-  const start = new Date(selectedDate);
-  start.setUTCHours(hours, minutes);
-  const end = new Date(start);
-  end.setUTCHours(start.getUTCHours() + 1);
-
-  const newEvent = {
-    title: event,
-    start: start,
-    end: end,
+  
+    const start = new Date(selectedDate);
+    start.setHours(hours, minutes);
+    const end = new Date(start);
+    end.setHours(start.getHours() + 1);
+  
+    const newEvent = {
+      title: event,
+      start: start,
+      end: end,
+    };
+  
+    // Actualiza el estado y almacena los eventos en localStorage
+    setEvents((prevEvents) => {
+      const updatedEvents = [...prevEvents, newEvent];
+      localStorage.setItem("events", JSON.stringify(updatedEvents));
+      return updatedEvents;
+    });
+  
+    setShowForm(false);
   };
-
-  // Actualiza el estado y almacena los eventos en localStorage
-  setEvents((prevEvents) => {
-    const updatedEvents = [...prevEvents, newEvent];
-    localStorage.setItem("events", JSON.stringify(updatedEvents));
-    return updatedEvents;
-  });
-
-  setShowForm(false);
-};
   const handleSelectEvent = (event) => {
     setSelectedDate(event.start);
     setShowForm(true);
   };
   const handleSelectSlot = (slotInfo) => {
     console.log(slotInfo);
-  
+    
     // Extrae la fecha y la hora de slotInfo.start
     const year = slotInfo.start.getFullYear();
     const month = slotInfo.start.getMonth();
@@ -228,6 +229,7 @@ export default function MyCalendar() {
             onSelectSlot={handleSelectSlot}
             selectable={true}
             onDrillDown={(date) => {
+                console.log(date);
               setSelectedDate(date);
               setShowForm(true);
             }}

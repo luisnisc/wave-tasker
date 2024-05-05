@@ -11,6 +11,7 @@ export default function Signin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [color, setColor] = useState("");
   const handlePasswordVisibility = () => {
     if (passwordInput === "password") {
       setPasswordInput("text");
@@ -37,19 +38,30 @@ export default function Signin() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, username, password }),
+        body: JSON.stringify({ email, username, password, color }),
       });
     
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        Swal.fire({
+          title: "Username or email already exists!",
+          text: "",
+          icon: "error",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#de6d6d",
+          background: "#272727",
+          customClass: {
+            confirmButton: "sweet-alert-button",
+            title: "sweet-alert-title",
+            content: "sweet-alert-content",
+          },
+        })
       } else {
         console.log(
           "User: " +
             username +
             " added"
         );
-        const newProduct = await response.json();
-        console.log(newProduct);
+        const newUser= await response.json();
         
         Swal.fire({
           title: "User added successfully!",
@@ -75,10 +87,10 @@ export default function Signin() {
   };
   return (
     <div className="flex justify-center items-center h-screen">
-      <h1 className="absolute top-0 left-0 m-4 text-5xl text-white font-bold italic">
+      <h1 className="absolute top-0 left-0 m-4 text-5xl text-white font-bold italic select-none">
         WaveTasker
       </h1>
-      <div className="absolute top-0 right-0 m-4 text-white mt-7 mr-9">
+      <div className="absolute top-0 right-0 m-4 text-white mt-7 mr-9 sleect-none">
         <a href="/">Log In</a>
       </div>
       <div
@@ -92,7 +104,7 @@ export default function Signin() {
           <div className="mt-8">
             <label
               htmlFor="email"
-              className="text-lg w-10 "
+              className="text-lg w-10 select-none"
             >
               Email
               <br />
@@ -109,7 +121,7 @@ export default function Signin() {
           <div className="mt-6">
             <label
               htmlFor="username"
-              className="text-lg w-10 "
+              className="text-lg w-10 select-none"
             >
               Username
               <br />
@@ -127,7 +139,7 @@ export default function Signin() {
           <div>
             <label
               htmlFor="password"
-              className="text-lg w-10"
+              className="text-lg w-10 select-none"
             >
               Password
               <br />
@@ -153,7 +165,7 @@ export default function Signin() {
           <div>
             <label
               htmlFor="passwordConfirm"
-              className="text-lg w-10"
+              className="text-lg w-10 select-none"
             >
               Confirm Password
               <br />
@@ -171,6 +183,26 @@ export default function Signin() {
                   onClick={handleConfirmPasswordVisibility}
                   sx={{ color: "gray" }}
                   className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                />
+              </div>
+            </label>
+          </div>
+          <br />
+          <div>
+            <label
+              htmlFor="passwordConfirm"
+              className="text-lg w-10 select-none"
+            >
+              Select your colour
+              
+              <div className="relative">
+                <input
+                  type= "color"
+                  id="passwordConfirm"
+                  className="border border-solid rounded-full w-8 "
+                  value={color}
+                  onChange={(e) => setColor(e.target.value)}
+                  required={false}
                 />
               </div>
             </label>
