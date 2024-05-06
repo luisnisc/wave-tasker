@@ -1,5 +1,8 @@
 // utils/mongodb.js
 import { MongoClient } from 'mongodb';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 let cached = global.mongo;
 
@@ -10,7 +13,8 @@ export async function connectToDatabase() {
     if (!cached.promise) {
         const conn = {};
         const dbName = "wave-tasker";
-        cached.promise = MongoClient.connect("mongodb+srv://guest:FzuTaVNUHhxbJ6el@wave-tasker.gjk6hka.mongodb.net/")
+        const uri = process.env.MONGODB_URI;
+        cached.promise = MongoClient.connect(uri)
             .then((client) => {
                 conn.client = client;
                 return client.db(dbName);
