@@ -154,7 +154,7 @@ export default function MyCalendar() {
                 />
               ),
             }}
-            onSelectSlot={null} // Añade esta línea
+            selectable={false} // Añade esta línea
           />
         </div>
       </div>
