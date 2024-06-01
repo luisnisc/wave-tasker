@@ -155,6 +155,7 @@ export default function MyCalendar() {
               ),
             }}
             selectable={false} // Añade esta línea
+            drilldownView={null} 
           />
         </div>
       </div>
