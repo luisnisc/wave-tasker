@@ -21,9 +21,10 @@ export default function Notes(initialData) {
   const [userId, setUserId] = useState("");
   const [username, setUsername] = useState("");
   const [randomColor, setRandomColor] = useState("");
+  // Esta función es para eliminar una nota
   const handleDelete = async (id) => {
     event.preventDefault();
-
+    // Llama a la API para eliminar la nota
     try {
       const response = await fetch(`/api/notes/${id}`, {
         method: "DELETE",
@@ -31,7 +32,7 @@ export default function Notes(initialData) {
           "Content-Type": "application/json",
         },
       });
-
+      // Alerta de error
       if (!response.ok) {
         Swal.fire({
           icon: "error",
@@ -65,6 +66,7 @@ export default function Notes(initialData) {
         }).then(() => {
           const deleteNoteId = Number(id);
           const newData = data.filter((note) => note.id !== deleteNoteId);
+          // Actualiza el estado de las notas
           setData(newData);
         });
       }

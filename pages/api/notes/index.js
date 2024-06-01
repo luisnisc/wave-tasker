@@ -17,8 +17,7 @@ export default async function handler(req, res) {
                 id: count + 1,
                 title: req.body.title,
                 body: req.body.body,
-                userId: req.body.userId, // Asegúrate de que el ID del usuario se envía desde el cliente
-                // Asegúrate de que los campos adicionales que necesitas estén aquí
+                userId: req.body.userId, 
             };
             await db.collection("notes").insertOne(newNote);
             res.status(201).json(newNote);

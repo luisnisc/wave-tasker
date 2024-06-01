@@ -18,6 +18,7 @@ export default function AddNoteForm() {
    */
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // Llama a la API para agregar una nota
     try {
       const response = await fetch("/api/notes", {
         method: "POST",
@@ -26,14 +27,14 @@ export default function AddNoteForm() {
         },
         body: JSON.stringify({ title, body, userId }),
       });
-
+      // Alerta de error
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       } else {
         console.log("Note: " + title + " added");
         const newNote = await response.json();
         console.log(newNote);
-
+        // Alerta de éxito
         Swal.fire({
           title: "Note added successfully!",
           text: "",
@@ -47,6 +48,7 @@ export default function AddNoteForm() {
             content: "sweet-alert-content",
           },
         }).then(() => {
+          // Redirige a la página de notas
           window.location.href = "/notes";
         });
       }
@@ -63,7 +65,7 @@ export default function AddNoteForm() {
   }, []);
   useEffect(() => {
     /**
-     * Obtiene los datos de productos desde el servidor.
+     * Obtiene los datos de notas desde el servidor.
      */
     const fetchData = async () => {
       const response = await fetch("/api/notes");

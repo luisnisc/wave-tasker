@@ -12,6 +12,7 @@ export default function Signin() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [color, setColor] = useState("");
+  // Esta función es para hacer visible o no la contraseña
   const handlePasswordVisibility = () => {
     if (passwordInput === "password") {
       setPasswordInput("text");
@@ -19,6 +20,7 @@ export default function Signin() {
       setPasswordInput("password");
     }
   };
+  // Esta función es para hacer visible o no la confirmación de la contraseña
   const handleConfirmPasswordVisibility = () => {
     if (confirmPasswordInput === "password") {
       setConfirmPasswordInput("text");
@@ -26,12 +28,15 @@ export default function Signin() {
       setConfirmPasswordInput("password");
     }
   };
+  // Esta función es para crear un nuevo usuario
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // Verifica si las contraseñas coinciden
     if (password !== confirmPassword) {
       alert("Passwords do not match");
       return;
     }else{
+    // Llama a la API para crear un nuevo usuario
     try {
       const response = await fetch("/api/users", {
         method: "POST",
@@ -40,7 +45,7 @@ export default function Signin() {
         },
         body: JSON.stringify({ email, username, password, color }),
       });
-    
+    // Alerta de error
       if (!response.ok) {
         Swal.fire({
           title: "Username or email already exists!",
@@ -61,8 +66,9 @@ export default function Signin() {
             username +
             " added"
         );
+        // Obtiene el nuevo usuario
         const newUser= await response.json();
-        
+        // Alerta de éxito
         Swal.fire({
           title: "User added successfully!",
           text: "",
@@ -75,6 +81,7 @@ export default function Signin() {
             title: "sweet-alert-title",
             content: "sweet-alert-content",
           },
+          // Redirige a la página de inicio
         }).then(() => {
           window.location.href = '/';
         });

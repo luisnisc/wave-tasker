@@ -16,6 +16,7 @@ import { MenuItem } from "@mui/base/MenuItem";
 import "../../../../styles/Task.css";
 import { set } from "mongoose";
 export default function Task() {
+  // Estados
   const [menuIconOpen, setMenuIconOpen] = useState(false);
   const [taskChecked, setTaskChecked] = useState(false);
   const [isPageLoaded, setIsPageLoaded] = useState(false);
@@ -48,8 +49,10 @@ export default function Task() {
         });
     }
   }, []);
+  // Funcion para editar una tarea
   const handleEdit = async (id) => {
     event.preventDefault();
+    // Si el campo de la tarea está vacío, muestra un mensaje de error
     if (changedTask == "") {
       Swal.fire({
         icon: "error",
@@ -65,9 +68,11 @@ export default function Task() {
           content: "sweet-alert-content",
         },
       }).then(() => {
+        // Cierra el formulario de edición
         setShowForm(null);
       });
     } else {
+      // Si el campo de la tarea no está vacío, actualiza la tarea
       try {
         const response = await fetch(`/api/tasks/${id}`, {
           method: "PUT",
@@ -76,6 +81,7 @@ export default function Task() {
           },
           body: JSON.stringify({ task: changedTask }),
         });
+        // Si hay un error, muestra un mensaje de error
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         } else {
@@ -92,10 +98,12 @@ export default function Task() {
               content: "sweet-alert-content",
             },
           }).then(() => {
+            // Actualiza la tarea
             const updatedTask = { id, task: changedTask };
             const newData = data.map((task) =>
               task.id === id ? updatedTask : task
             );
+            // Cierra el formulario de edición, actualiza la lista de tareas y limpia el campo de edición
             setShowForm(null);
             setData(newData);
             setChangedTask("");
@@ -107,9 +115,10 @@ export default function Task() {
       }
     }
   };
+  // Función para eliminar una tarea
   const handleDelete = async (id) => {
     event.preventDefault();
-
+    // Llama a la API para eliminar la tarea
     try {
       const response = await fetch(`/api/tasks/${id}`, {
         method: "DELETE",
@@ -117,7 +126,7 @@ export default function Task() {
           "Content-Type": "application/json",
         },
       });
-
+      // Si hay un error, muestra un mensaje de error
       if (!response.ok) {
         Swal.fire({
           icon: "error",
@@ -134,6 +143,7 @@ export default function Task() {
           },
         });
       } else {
+        // Si la tarea se elimina correctamente, muestra un mensaje de éxito
         console.log(`Task: ${id} deleted`);
 
         Swal.fire({
@@ -149,21 +159,21 @@ export default function Task() {
             content: "sweet-alert-content",
           },
         }).then(() => {
+          // Elimina la tarea de la lista de tareas
           const deleteTaskId = Number(id);
           const newData = data.filter((task) => task.id !== deleteTaskId);
+          // Actualiza la lista de tareas
           setData(newData);
         });
       }
     } catch (error) {
       console.error("Error:", error);
     }
-    /**
-     * Realiza una llamada a la API para obtener los datos de la tabla.
-     * Se ejecuta una vez al cargar el componente.
-     */
   };
+  // Función para añadir una tarea
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // Llama a la API para añadir una tarea
     try {
       const response = await fetch("/api/tasks", {
         method: "POST",
@@ -172,10 +182,11 @@ export default function Task() {
         },
         body: JSON.stringify({ task, userId, checked: false }),
       });
-
+      // Si hay un error, muestra un mensaje de error
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       } else {
+        // Si la tarea se añade correctamente, muestra un mensaje de éxito
         console.log("Task: " + task + " añadido");
         const newTask = await response.json();
         console.log(newTask);
@@ -193,6 +204,7 @@ export default function Task() {
             content: "sweet-alert-content",
           },
         }).then(() => {
+          // Actualiza la lista de tareas y limpia el campo de tarea
           setData((prevData) => [...prevData, newTask]);
           setTask("");
         });
@@ -201,6 +213,7 @@ export default function Task() {
       console.error("Error:", error);
     }
   };
+  // Función para marcar o desmarcar una tarea
   const handleCheck = async (id) => {
     console.log(data);
     const taskToCheck = data.find((task) => Number(task.id) === id);
@@ -208,9 +221,9 @@ export default function Task() {
       console.error(`Task with id ${id} not found`);
       return;
     }
-
+    // Actualiza la tarea
     const updatedTask = { ...taskToCheck, checked: !taskToCheck.checked };
-
+    // Llama a la API para actualizar la tarea
     try {
       const response = await fetch(`/api/tasks/${id}`, {
         method: "PUT",
@@ -219,7 +232,7 @@ export default function Task() {
         },
         body: JSON.stringify(updatedTask),
       });
-
+      // Si hay un error, muestra un mensaje de error
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -258,7 +271,7 @@ export default function Task() {
             <Menu
               id="menu"
               className="rounded-2xl pl-4 pt-3 mt-1"
-              onClose={() => setMenuIconOpen(false)} // Aquí es donde se cierra el menú
+              onClose={() => setMenuIconOpen(false)} 
             >
               <MenuItem className="text-lg">
                 <a href="/task">

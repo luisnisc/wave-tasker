@@ -9,14 +9,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordInput, setPasswordInput] = useState("password");
-  // const randomColor = useMemo(() => {
-  //   const letters = "0123456789ABCDEF";
-  //   let color = "#";
-  //   for (let i = 0; i < 6; i++) {
-  //     color += letters[Math.floor(Math.random() * 16)];
-  //   }
-  //   return color;
-  // }, []);
+  // Esta función es para hacer visible o no la contraseña
   const handlePasswordVisibility = () => {
     if (passwordInput === "password") {
       setPasswordInput("text");
@@ -29,15 +22,13 @@ export default function Login() {
   
     try {
       const response = await axios.post('/api/login', { username, password });
-  
+      // Esta parte es para que si el usuario y la contraseña son correctos, se guarde el id, el nombre de usuario y el color en el localStorage y se redirija a la página de tareas
       if (response.status === 200) {
-        // Authentication was successful. Redirect the user to the home page.
         localStorage.setItem('userId', response.data.id);
         localStorage.setItem('username', response.data.username);
         localStorage.setItem('color', response.data.color);
         window.location.href = '/task';
       } else {
-        // Authentication failed. Show an error message.
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -45,7 +36,7 @@ export default function Login() {
         });
       }
     } catch (error) {
-      // An error occurred. Show an error message.
+      //alerta de error
       Swal.fire({
         icon: "error",
         title: "Oops...",

@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Wave Tasker
 
-## Getting Started
+Wave Tasker es una aplicación de gestión de tareas que te permite crear un usuario, administrar tus propias tareas, utilizar un calendario y añadir notas. Está desarrollada utilizando Next.js y MongoDB como base de datos. Los estilos están definidos en archivos ubicados en la carpeta "styles" y también se utiliza Tailwind CSS en el código. Para ver la configuración de la api para peticiones HTTP, estan en el directorio '/pages/api'.
 
-First, run the development server:
+## Características
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Registro de usuarios: Crea una cuenta para acceder a todas las funcionalidades de Wave Tasker.
+- Gestión de tareas: Crea, actualiza y elimina tus tareas de manera sencilla.
+- Calendario: Visualiza calendario para una mejor organización.
+- Notas: Añade notas importantes relacionadas con tus tareas.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Requisitos
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- Node.js: Asegúrate de tener Node.js instalado en tu sistema.
+- MongoDB: Debes tener una instancia de MongoDB configurada y accesible.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Usar
 
-## Learn More
+- Para usar la aplicacion entra en <https://wave-tasker.vercel.app>
 
-To learn more about Next.js, take a look at the following resources:
+## Contribución
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Si deseas contribuir a este proyecto, por favor sigue las siguientes pautas:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1. Realiza un fork de este repositorio.
+2. Crea una rama con un nombre descriptivo: `git checkout -b mi-nueva-funcionalidad`.
+3. Realiza los cambios necesarios y realiza commits: `git commit -m "Agrega mi nueva funcionalidad"`.
+4. Envía tus cambios al repositorio remoto: `git push origin mi-nueva-funcionalidad`.
+5. Abre un pull request para revisar tus cambios.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

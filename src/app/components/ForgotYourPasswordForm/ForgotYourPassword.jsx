@@ -28,10 +28,7 @@ export default function ForgotYourPasswordForm() {
       setConfirmNewPasswordInput("password");
     }
   };
-  /**
-   * Maneja el envío del formulario.
-   * @param {Event} event - Evento de envío del formulario.
-   */
+  // funcion para cambiar la contraseña
   const handlePasswordChange = async (event) => {
     event.preventDefault();
   
@@ -48,10 +45,11 @@ export default function ForgotYourPasswordForm() {
           },
           body: JSON.stringify({username, newPassword}),
         });
-  
+        // Alerta de error
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }else{
+          // Alerta de éxito
             Swal.fire({
             title: "Password changed successfully!",
             text: "",

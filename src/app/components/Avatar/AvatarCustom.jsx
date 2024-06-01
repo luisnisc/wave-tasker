@@ -2,6 +2,7 @@ import React from "react";
 import Avatar from "@mui/material/Avatar";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+// Esta función hace que si el color de fondo del avatar es claro, la letra se muestre negra y si el color es oscuro, la letra se muestre clara
 function isLight(color) {
   const BackgroundColor = color.substring(1); // quita el #
   const rgb = parseInt(BackgroundColor, 16); // convierte rrggbb a decimal
