@@ -1,6 +1,6 @@
 # Wave Tasker
 
-Wave Tasker es una aplicación de gestión de tareas que te permite crear un usuario, administrar tus propias tareas, utilizar un calendario y añadir notas. Está desarrollada utilizando Next.js y MongoDB como base de datos. Los estilos están definidos en archivos ubicados en la carpeta "styles" y también se utiliza Tailwind CSS en el código. Para ver la configuración de la api para peticiones HTTP, estan en el directorio '/pages/api'.
+Wave Tasker es una aplicación de gestión de tareas que te permite crear un usuario, administrar tus propias tareas, utilizar un calendario y añadir notas. Está desarrollada utilizando Next.js y MongoDB como base de datos. Los estilos están definidos en los archivos ubicados en la carpeta "styles" y también se utiliza Tailwind CSS en el código. Para ver la configuración de la api para peticiones HTTP, estan en el directorio '/pages/api'.
 
 ## Características
 
