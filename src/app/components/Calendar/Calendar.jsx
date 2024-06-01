@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useState, useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
@@ -44,7 +44,7 @@ function CustomToolbar({ date, setDate }) {
   };
 
   return (
-    <div style={toolbarStyle} >
+    <div style={toolbarStyle}>
       <button
         style={buttonStyle}
         onClick={() => navigate("PREV")}
@@ -64,8 +64,6 @@ function CustomToolbar({ date, setDate }) {
 // Esta función es para el calendario en sí, es de la utilidad react-big-calendar
 export default function MyCalendar() {
   const [date, setDate] = useState(new Date());
-  const [showForm, setShowForm] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
   const [hour, setHour] = useState("");
   const [event, setEvent] = useState("");
   const [userId, setUserId] = useState("");
@@ -84,8 +82,11 @@ export default function MyCalendar() {
   }, []);
 
   return (
-    <div id="padre" className="select-none">
-      <AvatarCustom/>
+    <div
+      id="padre"
+      className="select-none"
+    >
+      <AvatarCustom />
       <div className="absolute top-0 right-0 m-5 text-4xl mr-7">
         <Dropdown>
           <MenuButton onClick={() => setMenuIconOpen(!menuIconOpen)}>
@@ -153,6 +154,7 @@ export default function MyCalendar() {
                 />
               ),
             }}
+            onSelectSlot={null} // Añade esta línea
           />
         </div>
       </div>
