@@ -4,7 +4,7 @@ Wave Tasker es una aplicación de gestión de tareas que te permite crear un usu
 
 ## Características
 
-- Registro de usuarios: Crea una cuenta para acceder a todas las funcionalidades de Wave Tasker.
+- Registro de usuarios: Crea una cuenta para acceder a todas las funcionalidades de Wave Tasker. Las contraseñas se encriptan para garantizar la seguridad de tus datos.
 - Gestión de tareas: Crea, actualiza y elimina tus tareas de manera sencilla.
 - Calendario: Visualiza calendario para una mejor organización.
 - Notas: Añade notas importantes relacionadas con tus tareas.
@@ -27,4 +27,3 @@ Si deseas contribuir a este proyecto, por favor sigue las siguientes pautas:
 3. Realiza los cambios necesarios y realiza commits: `git commit -m "Agrega mi nueva funcionalidad"`.
 4. Envía tus cambios al repositorio remoto: `git push origin mi-nueva-funcionalidad`.
 5. Abre un pull request para revisar tus cambios.
-
