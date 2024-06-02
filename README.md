@@ -9,11 +9,6 @@ Wave Tasker es una aplicación de gestión de tareas que te permite crear un usu
 - Calendario: Visualiza calendario para una mejor organización.
 - Notas: Añade notas importantes relacionadas con tus tareas.
 
-## Requisitos
-
-- Node.js: Asegúrate de tener Node.js instalado en tu sistema.
-- MongoDB: Debes tener una instancia de MongoDB configurada y accesible.
-
 ## Usar
 
 - Para usar la aplicacion entra en <https://wave-tasker.vercel.app>
